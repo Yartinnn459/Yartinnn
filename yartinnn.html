@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0b0d12">
+  <meta name="description" content="Yartinnn — moderné digitálne riešenia, dizajn a kreatívne služby pre značky, ktoré chcú vyniknúť.">
+  <title>Yartinnn — Kreatíva, ktorá posúva hranice</title>
+  <style>
+    :root {
+      --bg: #0b0d12;
+      --surface: #12151d;
+      --surface-2: #191e29;
+      --text: #f4f6fb;
+      --muted: #a5adbd;
+      --line: rgba(255,255,255,.1);
+      --accent: #b8ff5c;
+      --accent-2: #8ef0cb;
+      --radius: 22px;
+      --max: 1160px;
+    }
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; scroll-padding-top: 90px; }
+    body {
+      margin: 0; background: var(--bg); color: var(--text);
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      line-height: 1.6; overflow-x: hidden;
+    }
+    body::before {
+      content: ""; position: fixed; inset: 0; z-index: -2; pointer-events: none;
+      background: radial-gradient(ellipse at 80% 0%, rgba(184,255,92,.09), transparent 35%),
+                  radial-gradient(ellipse at 0% 40%, rgba(94,113,255,.08), transparent 30%);
+    }
+    a { color: inherit; text-decoration: none; }
+    button, input, textarea { font: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+    .container { width: min(var(--max), calc(100% - 44px)); margin: 0 auto; }
+    .topbar {
+      position: sticky; top: 0; z-index: 20; backdrop-filter: blur(18px);
+      background: rgba(11,13,18,.76); border-bottom: 1px solid transparent;
+      transition: border-color .25s, background .25s;
+    }
+    .topbar.scrolled { border-color: var(--line); background: rgba(11,13,18,.92); }
+    .nav { min-height: 78px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
+    .logo { font-size: 1.45rem; font-weight: 900; letter-spacing: -.07em; }
+    .logo span { color: var(--accent); }
+    .nav-links { display: flex; align-items: center; gap: 30px; color: var(--muted); font-size: .92rem; }
+    .nav-links a { transition: color .2s; }
+    .nav-links a:hover, .nav-links a:focus-visible { color: var(--accent); }
+    .nav-cta, .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+      border: 0; border-radius: 999px; padding: 13px 20px; font-weight: 750;
+      cursor: pointer; transition: transform .2s, background .2s, box-shadow .2s;
+    }
+    .nav-cta, .btn-primary { background: var(--accent); color: #10140b; }
+    .nav-cta:hover, .btn:hover { transform: translateY(-3px); box-shadow: 0 10px 30px rgba(184,255,92,.14); }
+    .menu-toggle { display: none; border: 1px solid var(--line); background: var(--surface); color: var(--text); border-radius: 12px; padding: 9px 12px; cursor: pointer; }
+    .hero { padding: 100px 0 88px; position: relative; }
+    .hero-grid { display: grid; grid-template-columns: 1.1fr .9fr; align-items: center; gap: 50px; }
+    .eyebrow { display: inline-flex; align-items: center; gap: 10px; color: var(--accent); font-size: .78rem; letter-spacing: .15em; font-weight: 800; text-transform: uppercase; }
+    .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 18px var(--accent); }
+    h1 { font-size: clamp(3.1rem, 7.5vw, 6.4rem); line-height: .99; letter-spacing: -.075em; margin: 23px 0; max-width: 760px; }
+    h1 em { font-style: normal; color: var(--accent); }
+    .hero-copy { max-width: 560px; color: var(--muted); font-size: 1.12rem; }
+    .hero-actions { display: flex; flex-wrap: wrap; gap: 13px; margin-top: 30px; }
+    .btn-secondary { background: rgba(255,255,255,.04); color: var(--text); border: 1px solid var(--line); }
+    .hero-note { display: flex; align-items: center; gap: 12px; margin-top: 35px; color: var(--muted); font-size: .88rem; }
+    .avatar-stack { display: flex; }
+    .avatar { width: 29px; height: 29px; display: grid; place-items: center; margin-left: -7px; border: 2px solid var(--bg); border-radius: 50%; color: #10140b; background: var(--accent); font-size: .65rem; font-weight: 900; }
+    .avatar:first-child { margin-left: 0; background: #c9b6ff; }
+    .avatar:nth-child(2) { background: #8ef0cb; }
+    .avatar:nth-child(3) { background: #ffb69c; }
+    .hero-art { min-height: 450px; position: relative; display: grid; place-items: center; }
+    .art-glow { position: absolute; width: 78%; aspect-ratio: 1; background: var(--accent); opacity: .12; filter: blur(75px); border-radius: 50%; }
+    .art-card {
+      position: relative; width: min(100%, 430px); aspect-ratio: .92; padding: 22px;
+      border: 1px solid rgba(255,255,255,.14); border-radius: 30px; overflow: hidden;
+      background: linear-gradient(145deg, #252b38, #11141b 62%); box-shadow: 0 35px 90px rgba(0,0,0,.4);
+      transform: rotate(3deg); animation: float 6s ease-in-out infinite;
+    }
+    .art-card::before { content: ""; position: absolute; width: 290px; height: 290px; border-radius: 50%; right: -80px; top: -60px; background: linear-gradient(135deg, #d6ff8d, #79d8b7); filter: blur(1px); }
+    .art-card::after { content: ""; position: absolute; width: 230px; height: 310px; left: 50px; bottom: -100px; border-radius: 48% 48% 15% 15%; transform: rotate(32deg); background: linear-gradient(150deg, #8c75ff, #28294d); box-shadow: 0 0 70px rgba(140,117,255,.3); }
+    .art-top { position: relative; z-index: 2; display: flex; justify-content: space-between; color: #fff; font-size: .75rem; letter-spacing: .1em; text-transform: uppercase; }
+    .art-mark { position: absolute; z-index: 3; left: 28px; bottom: 27px; font-size: clamp(4rem, 10vw, 7rem); line-height: .8; letter-spacing: -.1em; font-weight: 950; }
+    .floating-tag { position: absolute; z-index: 4; padding: 13px 16px; background: rgba(25,30,41,.88); border: 1px solid var(--line); border-radius: 15px; backdrop-filter: blur(12px); box-shadow: 0 15px 40px rgba(0,0,0,.2); font-size: .85rem; }
+    .floating-tag strong { color: var(--accent); }
+    .tag-one { top: 18%; right: -1%; animation: float 5s ease-in-out infinite reverse; }
+    .tag-two { bottom: 13%; left: -2%; animation: float 7s ease-in-out infinite; }
+    .section { padding: 95px 0; }
+    .section-head { display: flex; justify-content: space-between; align-items: end; gap: 30px; margin-bottom: 38px; }
+    .section-kicker { color: var(--accent); font-size: .78rem; font-weight: 800; text-transform: uppercase; letter-spacing: .16em; }
+    h2 { margin: 9px 0 0; font-size: clamp(2.2rem, 4.6vw, 4rem); letter-spacing: -.065em; line-height: 1.05; }
+    .section-head p { max-width: 420px; color: var(--muted); margin: 0; }
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; background: rgba(255,255,255,.02); }
+    .stat { padding: 28px; border-right: 1px solid var(--line); }
+    .stat:last-child { border-right: 0; }
+    .stat strong { display: block; font-size: clamp(1.8rem, 3vw, 2.6rem); letter-spacing: -.06em; }
+    .stat span { color: var(--muted); font-size: .9rem; }
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 16px; }
+    .service-card { padding: 28px; min-height: 255px; border: 1px solid var(--line); border-radius: var(--radius); background: linear-gradient(145deg, rgba(255,255,255,.045), rgba(255,255,255,.015)); transition: transform .25s, border-color .25s; }
+    .service-card:hover { transform: translateY(-6px); border-color: rgba(184,255,92,.45); }
+    .service-icon { width: 49px; height: 49px; display: grid; place-items: center; border-radius: 15px; background: rgba(184,255,92,.11); color: var(--accent); font-size: 1.35rem; }
+    .service-card h3 { margin: 25px 0 8px; font-size: 1.25rem; }
+    .service-card p { color: var(--muted); font-size: .95rem; margin: 0; }
+    .work-section { background: linear-gradient(180deg, transparent, rgba(255,255,255,.025), transparent); }
+    .filter-row { display: flex; flex-wrap: wrap; gap: 9px; margin-bottom: 25px; }
+    .filter-btn { padding: 9px 15px; border: 1px solid var(--line); background: transparent; color: var(--muted); border-radius: 999px; cursor: pointer; }
+    .filter-btn.active, .filter-btn:hover { color: #10140b; background: var(--accent); border-color: var(--accent); }
+    .gallery { display: grid; grid-template-columns: repeat(3,1fr); gap: 17px; }
+    .project { position: relative; min-height: 300px; border-radius: var(--radius); overflow: hidden; border: 1px solid var(--line); background: var(--surface); cursor: pointer; isolation: isolate; }
+    .project[hidden] { display: none; }
+    .project img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; transition: transform .6s cubic-bezier(.2,.8,.2,1); }
+    .project:hover img { transform: scale(1.07); }
+    .project::after { content: ""; position: absolute; inset: 0; z-index: 1; background: linear-gradient(180deg, transparent 25%, rgba(5,7,10,.88)); }
+    .project-info { position: absolute; z-index: 2; bottom: 20px; left: 21px; right: 21px; }
+    .project-info small { color: var(--accent); font-weight: 800; text-transform: uppercase; letter-spacing: .12em; }
+    .project-info h3 { margin: 5px 0 0; font-size: 1.35rem; }
+    .project-info p { margin: 4px 0 0; color: #c1c6d0; font-size: .9rem; }
+    .process-grid { display: grid; grid-template-columns: .8fr 1.2fr; gap: 70px; }
+    .process-intro p { color: var(--muted); max-width: 380px; }
+    .process-list { border-top: 1px solid var(--line); }
+    .process-step { display: grid; grid-template-columns: 58px 1fr; gap: 18px; padding: 24px 0; border-bottom: 1px solid var(--line); }
+    .step-no { color: var(--accent); font-weight: 850; font-size: .9rem; }
+    .process-step h3 { margin: 0 0 5px; }
+    .process-step p { margin: 0; color: var(--muted); }
+    .contact-wrap { display: grid; grid-template-columns: .9fr 1.1fr; gap: 55px; padding: clamp(25px, 5vw, 58px); border: 1px solid var(--line); border-radius: 30px; background: linear-gradient(135deg, rgba(184,255,92,.07), rgba(255,255,255,.025) 48%, rgba(140,117,255,.06)); }
+    .contact-copy p { color: var(--muted); max-width: 390px; }
+    .contact-detail { margin-top: 28px; color: var(--muted); font-size: .95rem; }
+    .contact-detail strong { display: block; color: var(--text); margin-bottom: 3px; }
+    .form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+    .field { display: flex; flex-direction: column; gap: 7px; }
+    .field.full { grid-column: 1 / -1; }
+    label { font-size: .85rem; color: #d7dbe4; }
+    input, textarea { width: 100%; border: 1px solid var(--line); background: rgba(8,10,14,.65); color: var(--text); border-radius: 13px; padding: 13px 14px; outline: none; transition: border-color .2s, box-shadow .2s; }
+    input:focus, textarea:focus { border-color: var(--accent); box-shadow: 0 0 0 3px rgba(184,255,92,.1); }
+    textarea { min-height: 125px; resize: vertical; }
+    .form-submit { margin-top: 16px; width: 100%; }
+    .form-message { min-height: 24px; color: var(--accent); font-size: .9rem; margin: 12px 0 0; }
+    footer { padding: 30px 0; border-top: 1px solid var(--line); color: var(--muted); }
+    .footer-row { display: flex; justify-content: space-between; gap: 20px; align-items: center; font-size: .88rem; }
+    .footer-links { display: flex; gap: 18px; }
+    .footer-links a:hover { color: var(--accent); }
+    .back-top { position: fixed; right: 22px; bottom: 22px; z-index: 15; width: 45px; height: 45px; border-radius: 50%; border: 1px solid var(--line); background: var(--surface-2); color: var(--accent); cursor: pointer; opacity: 0; pointer-events: none; transform: translateY(10px); transition: .25s; }
+    .back-top.visible { opacity: 1; pointer-events: auto; transform: translateY(0); }
+    .reveal { opacity: 1; transform: none; }
+    body.js-enabled .reveal { opacity: 0; transform: translateY(22px); transition: opacity .7s ease, transform .7s ease; }
+    body.js-enabled .reveal.in-view { opacity: 1; transform: translateY(0); }
+    @keyframes float { 0%,100% { transform: translateY(0) rotate(3deg); } 50% { transform: translateY(-13px) rotate(1deg); } }
+    @media (prefers-reduced-motion: reduce) { *, *::before, *::after { scroll-behavior: auto !important; animation-duration: .01ms !important; transition-duration: .01ms !important; } .reveal, body.js-enabled .reveal { opacity: 1; transform: none; } }
+    @media (max-width: 900px) {
+      .hero-grid, .process-grid, .contact-wrap { grid-template-columns: 1fr; }
+      .hero { padding-top: 75px; }
+      .hero-art { min-height: 400px; }
+      .services-grid { grid-template-columns: repeat(2,1fr); }
+      .gallery { grid-template-columns: repeat(2,1fr); }
+      .process-grid { gap: 35px; }
+      .contact-wrap { gap: 30px; }
+      .section-head { align-items: start; flex-direction: column; }
+    }
+    @media (max-width: 640px) {
+      .container { width: min(var(--max), calc(100% - 30px)); }
+      .nav { min-height: 68px; }
+      .menu-toggle { display: inline-flex; }
+      .nav-cta { display: none; }
+      .nav-links { display: none; position: absolute; top: 68px; left: 0; right: 0; padding: 18px 22px 22px; background: rgba(11,13,18,.98); border-bottom: 1px solid var(--line); flex-direction: column; align-items: stretch; gap: 0; }
+      .nav-links.open { display: flex; }
+      .nav-links a { padding: 12px 0; }
+      .hero { padding: 64px 0 55px; }
+      h1 { font-size: clamp(3rem, 16vw, 5rem); }
+      .hero-art { min-height: 330px; }
+      .art-card { width: 82%; }
+      .tag-one { right: 0; }
+      .tag-two { left: 0; }
+      .section { padding: 68px 0; }
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .stat:nth-child(2) { border-right: 0; }
+      .stat:nth-child(-n+2) { border-bottom: 1px solid var(--line); }
+      .services-grid, .gallery { grid-template-columns: 1fr; }
+      .project { min-height: 290px; }
+      .service-card { min-height: auto; }
+      .contact-wrap { padding: 24px 18px; border-radius: 23px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .field.full { grid-column: auto; }
+      .footer-row { flex-direction: column; align-items: flex-start; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar" id="topbar">
+    <div class="container nav">
+      <a class="logo" href="#domov" aria-label="Yartinnn – domov">Yartinnn<span>.</span></a>
+      <nav class="nav-links" id="navLinks" aria-label="Hlavná navigácia">
+        <a href="#sluzby">Služby</a>
+        <a href="#projekty">Projekty</a>
+        <a href="#proces">Náš proces</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+      <a class="nav-cta" href="#kontakt">Začnime spolu <span aria-hidden="true">↗</span></a>
+      <button class="menu-toggle" id="menuToggle" aria-expanded="false" aria-controls="navLinks" aria-label="Otvoriť navigáciu">☰</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="hero" id="domov">
+      <div class="container hero-grid">
+        <div class="reveal">
+          <div class="eyebrow"><span class="dot"></span> Kreatívne štúdio novej generácie</div>
+          <h1>Robíme značky, ktoré <em>zanechajú stopu.</em></h1>
+          <p class="hero-copy">Yartinnn spája odvážne nápady, premyslený dizajn a digitálne riešenia. Pomáhame značkám vyzerať skvelo, komunikovať jasne a rásť s istotou. Od prvého konceptu až po hotový web tvoríme digitálne zážitky, ktoré spájajú výrazný vizuál s praktickým využitím.</p>
+          <div class="hero-actions">
+            <a class="btn btn-primary" href="#projekty">Pozrieť našu prácu <span aria-hidden="true">↘</span></a>
+            <a class="btn btn-secondary" href="#sluzby">Čo robíme</a>
+          </div>
+          <div class="hero-note">
+            <div class="avatar-stack" aria-hidden="true"><span class="avatar">Y</span><span class="avatar">A</span><span class="avatar">+</span></div>
+            <span>Veľké nápady. Precízne prevedenie.</span>
+          </div>
+        </div>
+        <div class="hero-art reveal" aria-label="Abstraktná grafika značky Yartinnn">
+          <div class="art-glow"></div>
+          <div class="art-card">
+            <div class="art-top"><span>Yartinnn studio</span><span>Creative / 2026</span></div>
+            <div class="art-mark">Y<span style="color:var(--accent)">.</span></div>
+          </div>
+          <div class="floating-tag tag-one">Nápad → <strong>realita</strong></div>
+          <div class="floating-tag tag-two"><strong>100%</strong> kreatívna energia ✳</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="container section" aria-label="Prehľad">
+      <div class="stats reveal">
+        <div class="stat"><strong>360°</strong><span>Pohľad na značku</span></div>
+        <div class="stat"><strong>01—∞</strong><span>Nápady bez limitov</span></div>
+        <div class="stat"><strong>100%</strong><span>Dôraz na detail</span></div>
+        <div class="stat"><strong>24/7</strong><span>Digitálny svet</span></div>
+      </div>
+    </section>
+
+    <section class="section" id="sluzby">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><div class="section-kicker">Čo vieme</div><h2>Od prvého nápadu<br>po posledný pixel.</h2></div>
+          <p>Každý projekt je príležitosť vytvoriť niečo výnimočné. Spájame stratégiu, kreativitu a technológie do jedného funkčného celku.</p>
+        </div>
+        <div class="services-grid">
+          <article class="service-card reveal"><div class="service-icon">✳</div><h3>Branding & identita</h3><p>Vizuálna identita a tón komunikácie, vďaka ktorým bude vaša značka rozpoznateľná a zapamätateľná.</p></article>
+          <article class="service-card reveal"><div class="service-icon">⌘</div><h3>Web & digitál</h3><p>Moderné, rýchle a responzívne weby, ktoré vyzerajú skvelo na mobile aj na veľkej obrazovke.</p></article>
+          <article class="service-card reveal"><div class="service-icon">◈</div><h3>Obsah & kreatíva</h3><p>Vizuály a kampane, ktoré rozprávajú príbeh vašej značky a pomáhajú zaujať správnych ľudí.</p></article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section work-section" id="projekty">
+      <div class="container">
+        <div class="section-head reveal">
+          <div><div class="section-kicker">Vybrané projekty</div><h2>Práca, ktorá hovorí<br>sama za seba.</h2></div>
+          <p>Malá ukážka kreatívnych smerov, ktoré nás bavia. Galériu môžeš filtrovať podľa typu projektu.</p>
+        </div>
+        <div class="filter-row reveal" role="group" aria-label="Filtrovať projekty">
+          <button class="filter-btn active" data-filter="all" aria-pressed="true">Všetko</button>
+          <button class="filter-btn" data-filter="branding" aria-pressed="false">Branding</button>
+          <button class="filter-btn" data-filter="web" aria-pressed="false">Web dizajn</button>
+          <button class="filter-btn" data-filter="content" aria-pressed="false">Kreatíva</button>
+        </div>
+        <div class="gallery">
+          <article class="project reveal" data-category="branding" tabindex="0" role="button" aria-label="Projekt Form Studio, branding">
+            <img src="https://images.unsplash.com/photo-1497366811353-6870744d04b2?auto=format&fit=crop&w=900&q=85" alt="Minimalistický interiér s moderným dizajnom" loading="lazy">
+            <div class="project-info"><small>Branding · 2026</small><h3>Form Studio</h3><p>Pokojný dizajn s výrazným charakterom</p></div>
+          </article>
+          <article class="project reveal" data-category="web" tabindex="0" role="button" aria-label="Projekt Mono Objects, web dizajn">
+            <img src="https://images.unsplash.com/photo-1511818966892-d7d671e672a2?auto=format&fit=crop&w=900&q=85" alt="Súčasná architektúra s geometrickými líniami" loading="lazy">
+            <div class="project-info"><small>Web dizajn · 2026</small><h3>Mono Objects</h3><p>Digitálny priestor pre čisté formy</p></div>
+          </article>
+          <article class="project reveal" data-category="content" tabindex="0" role="button" aria-label="Projekt New Ritual, kreatíva">
+            <img src="https://images.unsplash.com/photo-1497366754035-f200968a6e72?auto=format&fit=crop&w=900&q=85" alt="Pokojná wellness atmosféra a jemné svetlo" loading="lazy">
+            <div class="project-info"><small>Kreatíva · 2026</small><h3>New Ritual</h3><p>Vizuálny príbeh pre nový životný štýl</p></div>
+          </article>
+          <article class="project reveal" data-category="branding" tabindex="0" role="button" aria-label="Projekt Objects, branding">
+            <img src="https://images.unsplash.com/photo-1494438639946-1ebd1d20bf85?auto=format&fit=crop&w=900&q=85" alt="Minimalistická budova v kontrastnom svetle" loading="lazy">
+            <div class="project-info"><small>Branding · 2025</small><h3>Objects</h3><p>Jednoduchosť ako hlavný podpis</p></div>
+          </article>
+          <article class="project reveal" data-category="web" tabindex="0" role="button" aria-label="Projekt Soft Space, web dizajn">
+            <img src="https://images.unsplash.com/photo-1600210492486-724fe5c67fb0?auto=format&fit=crop&w=900&q=85" alt="Súčasný priestor s prírodnými materiálmi" loading="lazy">
+            <div class="project-info"><small>Web dizajn · 2025</small><h3>Soft Space</h3><p>Web, ktorý dýcha rovnako ako značka</p></div>
+          </article>
+          <article class="project reveal" data-category="content" tabindex="0" role="button" aria-label="Projekt Slow Days, kreatíva">
+            <img src="https://images.unsplash.com/photo-1517248135467-4c7edcad34c4?auto=format&fit=crop&w=900&q=85" alt="Detail relaxačného priestoru s teplým osvetlením" loading="lazy">
+            <div class="project-info"><small>Kreatíva · 2025</small><h3>Slow Days</h3><p>Atmosféra, ktorú cítiť na prvý pohľad</p></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="proces">
+      <div class="container process-grid">
+        <div class="process-intro reveal"><div class="section-kicker">Ako pracujeme</div><h2>Jasný proces.<br>Silný výsledok.</h2><p>Dobrá spolupráca nemusí byť komplikovaná. Od začiatku vieš, čo sa deje, prečo to robíme a kam smerujeme.</p><a class="btn btn-secondary" href="#kontakt">Porozprávajme sa <span aria-hidden="true">↗</span></a></div>
+        <div class="process-list reveal">
+          <div class="process-step"><div class="step-no">01 /</div><div><h3>Spoznáme sa</h3><p>Vypočujeme si tvoje ciele, výzvy a predstavy. Spoločne definujeme, čo znamená úspech.</p></div></div>
+          <div class="process-step"><div class="step-no">02 /</div><div><h3>Navrhneme smer</h3><p>Pripravíme koncept a plán, ktorý prepája stratégiu s vizuálnou stránkou.</p></div></div>
+          <div class="process-step"><div class="step-no">03 /</div><div><h3>Vytvoríme zážitok</h3><p>Premeníme koncept na premyslený dizajn a funkčné digitálne riešenie.</p></div></div>
+          <div class="process-step"><div class="step-no">04 /</div><div><h3>Spustíme a rastieme</h3><p>Doladíme detaily, odovzdáme výstupy a pripravíme pôdu pre ďalší rast.</p></div></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="section" id="kontakt">
+      <div class="container">
+        <div class="contact-wrap reveal">
+          <div class="contact-copy">
+            <div class="section-kicker">Tvoj ťah</div>
+            <h2>Poďme vytvoriť niečo skvelé.</h2>
+            <p>Máš nápad, projekt alebo len otázku? Napíš nám pár slov. Ozveme sa a zistíme, čo spolu dokážeme.</p>
+            <div class="contact-detail"><strong>Yartinnn Studio</strong><span>Kreatíva · Dizajn · Digitál</span></div>
+            <div class="contact-detail"><strong>Napíš nám</strong><span>Sem doplň svoj e-mail alebo telefón</span></div>
+          </div>
+          <div>
+            <form id="contactForm">
+              <div class="form-grid">
+                <div class="field"><label for="name">Tvoje meno *</label><input id="name" name="name" autocomplete="name" placeholder="Ako ťa volajú?" required></div>
+                <div class="field"><label for="email">E-mail *</label><input id="email" name="email" type="email" autocomplete="email" placeholder="ty@firma.sk" required></div>
+                <div class="field full"><label for="subject">Čo potrebuješ?</label><input id="subject" name="subject" placeholder="Web, branding, kreatíva..."></div>
+                <div class="field full"><label for="message">Povedz nám viac *</label><textarea id="message" name="message" placeholder="Pár viet o tvojom projekte..." required></textarea></div>
+              </div>
+              <button class="btn btn-primary form-submit" type="submit">Pripraviť správu <span aria-hidden="true">↗</span></button>
+              <p class="form-message" id="formMessage" aria-live="polite">Pred zverejnením treba v JavaScripte nastaviť skutočnú adresu v premennej CONTACT_EMAIL.</p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container footer-row">
+      <a class="logo" href="#domov">Yartinnn<span>.</span></a>
+      <span>© <span id="year"></span> Yartinnn. Všetky práva vyhradené.</span>
+      <div class="footer-links"><a href="#sluzby">Služby</a><a href="#projekty">Projekty</a><a href="#kontakt">Kontakt</a></div>
+    </div>
+  </footer>
+  <button class="back-top" id="backTop" aria-label="Späť na začiatok">↑</button>
+
+  <script>
+    document.body.classList.add('js-enabled');
+    const topbar = document.getElementById('topbar');
+    const backTop = document.getElementById('backTop');
+    const menuToggle = document.getElementById('menuToggle');
+    const navLinks = document.getElementById('navLinks');
+
+    document.getElementById('year').textContent = new Date().getFullYear();
+
+    function updateScrollUI() {
+      topbar.classList.toggle('scrolled', window.scrollY > 12);
+      backTop.classList.toggle('visible', window.scrollY > 500);
+    }
+    window.addEventListener('scroll', updateScrollUI, { passive: true });
+    updateScrollUI();
+
+    menuToggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      menuToggle.setAttribute('aria-expanded', String(open));
+      menuToggle.textContent = open ? '✕' : '☰';
+    });
+    navLinks.querySelectorAll('a').forEach(link => link.addEventListener('click', () => {
+      navLinks.classList.remove('open');
+      menuToggle.setAttribute('aria-expanded', 'false');
+      menuToggle.textContent = '☰';
+    }));
+    backTop.addEventListener('click', () => window.scrollTo({ top: 0, behavior: 'smooth' }));
+
+    const revealItems = document.querySelectorAll('.reveal');
+    if ('IntersectionObserver' in window) {
+      const revealObserver = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('in-view');
+            revealObserver.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.12 });
+      revealItems.forEach(el => revealObserver.observe(el));
+    } else {
+      revealItems.forEach(el => el.classList.add('in-view'));
+    }
+
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    const projects = document.querySelectorAll('.project');
+    filterButtons.forEach(button => button.addEventListener('click', () => {
+      const filter = button.dataset.filter;
+      filterButtons.forEach(item => {
+        const active = item === button;
+        item.classList.toggle('active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
+      projects.forEach(project => {
+        project.hidden = filter !== 'all' && project.dataset.category !== filter;
+      });
+    }));
+
+    // Projektové karty reagujú na Enter/medzerník; zatiaľ zobrazia stručný detail.
+    function showProjectDetail(project) {
+      const title = project.querySelector('h3')?.textContent || 'Projekt';
+      const description = project.querySelector('p')?.textContent || '';
+      alert(`${title}\n\n${description}\n\nUkážkový projekt — nahraď tieto údaje vlastnými referenciami.`);
+    }
+    projects.forEach(project => {
+      project.addEventListener('click', () => showProjectDetail(project));
+      project.addEventListener('keydown', event => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          showProjectDetail(project);
+        }
+      });
+    });
+
+    // Samostatný HTML súbor nemá server na spracovanie formulára.
+    // Pred zverejnením zmeň CONTACT_EMAIL na skutočnú adresu.
+    const CONTACT_EMAIL = 'SEM-DOPLN-EMAIL@PRIKLAD.SK';
+    document.getElementById('contactForm').addEventListener('submit', event => {
+      event.preventDefault();
+      const form = event.currentTarget;
+      if (!form.reportValidity()) return;
+      const data = new FormData(form);
+      const name = data.get('name').toString().trim();
+      const email = data.get('email').toString().trim();
+      const subject = data.get('subject').toString().trim() || 'Dopyt z webu Yartinnn';
+      const message = data.get('message').toString().trim();
+      const body = `Meno: ${name}\nE-mail: ${email}\n\nSpráva:\n${message}`;
+      const status = document.getElementById('formMessage');
+      if (CONTACT_EMAIL === 'SEM-DOPLN-EMAIL@PRIKLAD.SK') {
+        status.textContent = 'Formulár je pripravený, ale vlastník stránky musí v kóde doplniť skutočný e-mail do premennej CONTACT_EMAIL.';
+        return;
+      }
+      const mailto = `mailto:${CONTACT_EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      status.textContent = 'Otváram e-mailovú aplikáciu s pripravenou správou.';
+      window.location.href = mailto;
+    });
+  </script>
+</body>
+</html>
